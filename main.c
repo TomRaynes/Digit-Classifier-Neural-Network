@@ -22,7 +22,9 @@ int main(void) {
 
     srand(time(NULL));
     Vector* input = newVector(3);
-    Matrix* matrix = newMatrix(3, 2);
+    Matrix* matrix = newMatrix(3, 2, NULL);
+    saveWeights(matrix, "weights.txt");
+
 
     printf("Input layer:\n");
     input->print(input);
@@ -35,7 +37,6 @@ int main(void) {
     printf("\n\nOutput layer:\n");
     output->print(output);
 
-    saveWeights(matrix, "weights.txt");
 
     output->free(output);
     matrix->free(matrix);

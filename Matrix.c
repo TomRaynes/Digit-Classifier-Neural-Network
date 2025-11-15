@@ -1,6 +1,6 @@
 #include "nn.h"
 
-Matrix* newMatrix(int size, int depth) {
+Matrix* newMatrix(int size, int depth, char* weightsPath) {
     Matrix *matrix = malloc(sizeof(Matrix));
     matrix->size = size;
     matrix->depth = depth;
@@ -17,9 +17,14 @@ Matrix* newMatrix(int size, int depth) {
             printf("Failed to allocate memory for matrix data[%d]\n", i);
             exit(EXIT_FAILURE);
         }
-        for (int j = 0; j < size; j++) {
-            matrix->weights[i][j] = (double) rand() / RAND_MAX * 2 - 1;
+        if (weightsPath == NULL) {
+            for (int j = 0; j < size; j++) {
+                matrix->weights[i][j] = (double) rand() / RAND_MAX * 2 - 1;
+            }
         }
+    }
+    if (weightsPath != NULL) {
+        loadWeights(matrix, weightsPath);
     }
     matrix->biases = malloc(depth * sizeof(double));
 
@@ -62,10 +67,24 @@ void saveWeights(Matrix* matrix, char* filename) {
     }
 
     for (int layer = 0; layer < matrix->depth; layer++) {
-        for (int index = 0; index < matrix->size; index++) {
-            fprintf(fp, "%f ", matrix->weights[layer][index]);
-        }
-        fprintf(fp, "\n");
+        fwrite(matrix->weights[layer], sizeof(double), matrix->size, fp);
+        // for (int index = 0; index < matrix->size; index++) {
+        //     fprintf(fp, "%.8f ", matrix->weights[layer][index]);
+        // }
+        // fprintf(fp, "\n");
+    }
+    fclose(fp);
+}
+
+void loadWeights(Matrix* matrix, char* filename) {
+    FILE* fp = fopen(filename, "r");
+
+    if (fp == NULL) {
+        printf("Failed to open %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
+    for (int layer = 0; layer < matrix->depth; layer++) {
+        fread(matrix->weights[layer], sizeof(double), matrix->size, fp);
     }
     fclose(fp);
 }
