@@ -1,5 +1,3 @@
-#include <math.h>
-
 #include "nn.h"
 
 Vector* newVector(int size) {
