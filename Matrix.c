@@ -27,6 +27,7 @@ Matrix* newMatrix(int size, int depth, char* weightsPath) {
         loadWeights(matrix, weightsPath);
     }
     matrix->biases = malloc(depth * sizeof(double));
+    // TODO: load biases
 
     if (matrix->biases == NULL) {
         printf("Failed to allocate memory for matrix bias data\n");
@@ -65,13 +66,8 @@ void saveWeights(Matrix* matrix, char* filename) {
         printf("Failed to open file for writing\n");
         exit(EXIT_FAILURE);
     }
-
     for (int layer = 0; layer < matrix->depth; layer++) {
         fwrite(matrix->weights[layer], sizeof(double), matrix->size, fp);
-        // for (int index = 0; index < matrix->size; index++) {
-        //     fprintf(fp, "%.8f ", matrix->weights[layer][index]);
-        // }
-        // fprintf(fp, "\n");
     }
     fclose(fp);
 }

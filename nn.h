@@ -28,6 +28,12 @@ typedef struct Vector {
 } Vector;
 
 typedef struct {
+    Matrix* layer1;
+    Matrix* layer2;
+    Matrix* layer3;
+} Layers;
+
+typedef struct {
     unsigned int size, rows, cols, magicNumber;
     unsigned char** data;
 } Images;
@@ -55,3 +61,4 @@ Images* load_images(char* filename);
 Labels* load_labels(const char* filename);
 void free_images(Images* images);
 void free_labels(Labels* labels);
+Layers* model_layers();
